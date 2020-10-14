@@ -1,26 +1,51 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+<div id="app">
+    <div class="wrapper">
+        <div class="container">
+            <h3>Got Jokes?</h3>
+
+            <button class="btn btn-primary" @click="initJokes">Add ten random jokes</button>
+            <button class="btn btn-primary" @click="addJoke">Add a random joke</button>
+
+            <span v-for="(t, index) in types" :key="index">
+
+                <input type="checkbox" :value="t" v-model="checkedTypes" checked>
+
+                <label>{{t}}</label>
+            </span>
+
+            <Joke v-for="(joke, index) in $store.state.jokes" v-show="checkedTypes.includes(joke.type)" :joke="joke" :index="index" :key="index" />
+        </div>
+    </div>
+</div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import {
+    mapActions
+} from 'vuex'
+import Joke from './components/Jokes.vue'
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+    data() {
+        return {
+            types: [
+                'general',
+                'knock-knock',
+                'programming'
+            ],
+            checkedTypes: [
+                'general',
+                'knock-knock',
+                'programming'
+            ]
+        }
+    },
+    methods: mapActions([
+        'initJokes',
+        'addJoke'
+    ]),
+    components: {
+        Joke
+    }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
